@@ -266,14 +266,14 @@
   - [x] Interaction variants (interactive, readonly, editable)
 
 #### Video Cards
-- [ ] Create VideoPostCard
-  - [ ] Video player
-  - [ ] Thumbnail
-  - [ ] Duration
-  - [ ] Controls
-- [ ] Add autoplay options
-- [ ] Create mini player
-- [ ] Add video optimization
+- [x] Create VideoPostCard
+  - [x] Video player
+  - [x] Thumbnail
+  - [x] Duration
+  - [x] Controls
+- [x] Add autoplay options
+- [x] Create mini player
+- [x] Add video optimization
 
 #### Activity Cards
 - [ ] Build ActivityCard
