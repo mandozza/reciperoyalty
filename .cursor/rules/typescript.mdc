@@ -1,0 +1,120 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Rules for TypeScript development
+globs: "*.ts,*.tsx"
+alwaysApply: true
+emoji: 🔷
+title: TypeScript Best Practices
+---
+
+# Cursor Rule: TypeScript Best Practices
+
+## Description  
+Promote type safety, readability, and maintainability across your codebase with TypeScript. These rules apply to type declarations, inference, strictness, project configuration, and error handling.
+
+## Rules
+
+---
+
+### 🧠 1. Type Safety First
+- **Rule**: Avoid `any` unless absolutely necessary.
+- **Best Practices**:
+  - Use `unknown` instead of `any` when the type is intentionally generic
+  - Use `never` to catch impossible code paths
+- **Applies To**: `typing`, `safety`, `strictness`
+- **Priority**: Critical
+
+---
+
+### 🧾 2. Prefer Interfaces for Objects
+- **Rule**: Use `interface` for object shapes unless you need advanced features from `type`.
+- **Best Practices**:
+  - Use `interface` for public APIs and extendable objects
+  - Use `type` for unions, intersections, or function types
+- **Applies To**: `types`, `interfaces`, `objects`
+- **Priority**: High
+
+---
+
+### 🔍 3. Use Type Inference When Possible
+- **Rule**: Let TypeScript infer types where it's obvious.
+- **Best Practices**:
+  - Don’t over-annotate variables (`const name = "Alex"` doesn't need `: string`)
+  - Explicitly annotate function return types and props
+- **Applies To**: `inference`, `annotations`, `readability`
+- **Priority**: Medium
+
+---
+
+### 📦 4. Consistent Project Configuration
+- **Rule**: Use a strict and unified `tsconfig.json`.
+- **Best Practices**:
+  - Enable `strict`, `noImplicitAny`, `strictNullChecks`, and `esModuleInterop`
+  - Keep `baseUrl` and `paths` clean for imports
+- **Applies To**: `config`, `compilation`, `linting`
+- **Priority**: High
+
+---
+
+### 🧼 5. Clean and Maintainable Types
+- **Rule**: Avoid deeply nested or overly complex types.
+- **Best Practices**:
+  - Break large types into smaller reusable types
+  - Avoid `Record<string, any>` in favor of specific shapes
+- **Applies To**: `types`, `code clarity`, `refactoring`
+- **Priority**: Medium
+
+---
+
+### 🧱 6. Typed Props and State in React
+- **Rule**: Explicitly type React component props and state.
+- **Best Practices**:
+  - Use `FC<Props>` or regular function typing (`(props: Props) => {}`)
+  - Use `useState<Type>()` when initial value doesn't infer the type
+- **Applies To**: `React`, `props`, `hooks`
+- **Priority**: High
+
+---
+
+### 🔐 7. Safe API Contracts
+- **Rule**: Strongly type external API responses and inputs.
+- **Best Practices**:
+  - Use Zod or Yup for runtime validation and type inference
+  - Define request and response interfaces for all APIs
+- **Applies To**: `api`, `validation`, `integration`
+- **Priority**: High
+
+---
+
+### 💥 8. Avoid Type Assertions When Possible
+- **Rule**: Avoid `as Type` unless absolutely sure.
+- **Best Practices**:
+  - Prefer narrowing types instead of casting
+  - Avoid non-null assertions (`!`) unless you've validated the condition
+- **Applies To**: `safety`, `readability`, `edge cases`
+- **Priority**: Medium
+
+---
+
+### 📁 9. Organize Types Cleanly
+- **Rule**: Keep types modular and colocated where appropriate.
+- **Best Practices**:
+  - Group types by domain or feature (`types/user.ts`, `types/post.ts`)
+  - Avoid dumping all types into a single `types.ts` unless it's a shared contract
+- **Applies To**: `structure`, `reusability`, `organization`
+- **Priority**: Medium
+
+---
+
+### 🔄 10. Use Utility Types Wisely
+- **Rule**: Leverage TypeScript utility types to keep code DRY.
+- **Best Practices**:
+  - Use `Pick`, `Omit`, `Partial`, `Required`, `Record`, etc., for composing types
+  - Create your own utility types when patterns repeat
+- **Applies To**: `DRY`, `productivity`, `flexibility`
+- **Priority**: Medium
+

@@ -1,0 +1,122 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Rules for NextAuth.js implementation
+globs: "*/auth/*,*/api/auth/*"
+alwaysApply: true
+emoji: 🔐
+title: NextAuth.js Best Practices
+---
+
+
+# Cursor Rule: NextAuth.js Best Practices
+
+## Description  
+Promote secure, scalable, and user-friendly authentication with NextAuth.js. These rules cover providers, session handling, JWT usage, database integration, and security.
+
+## Rules
+
+---
+
+### 🔐 1. Provider Configuration
+- **Rule**: Only enable providers you intend to support; never expose test credentials.
+- **Best Practices**:
+  - Use OAuth providers like GitHub, Google, or custom credentials
+  - Store all client IDs/secrets in environment variables
+- **Applies To**: `auth`, `env`, `providers`
+- **Priority**: Critical
+
+---
+
+### 🧠 2. Session Strategy
+- **Rule**: Choose a session strategy based on app needs (`jwt` for stateless, `database` for persistent).
+- **Best Practices**:
+  - Use `jwt` for serverless and API-based apps
+  - Use `database` for tracking sessions, devices, and long-lived auth
+- **Applies To**: `session`, `security`, `auth strategy`
+- **Priority**: High
+
+---
+
+### 🛡 3. Security & Tokens
+- **Rule**: Secure all token operations and validate user data on the server.
+- **Best Practices**:
+  - Set a strong `NEXTAUTH_SECRET` for JWT encryption
+  - Use `signIn()` and `getToken()` for secure custom flows
+  - Validate tokens server-side in API routes/middleware
+- **Applies To**: `tokens`, `JWT`, `security`
+- **Priority**: Critical
+
+---
+
+### 🧬 4. Callbacks
+- **Rule**: Use callbacks to extend or modify session, token, or user behavior safely.
+- **Best Practices**:
+  - Keep logic in `callbacks` pure and side-effect free
+  - Add roles or permissions to session object in `jwt` and `session` callbacks
+- **Applies To**: `auth`, `roles`, `security`, `permissions`
+- **Priority**: High
+
+---
+
+### 📦 5. Adapter Usage (Database)
+- **Rule**: Use a database adapter when you need persistent sessions, accounts, or user models.
+- **Best Practices**:
+  - Use official adapters (e.g., Prisma, TypeORM, Mongoose)
+  - Extend adapter logic via custom models or functions
+- **Applies To**: `persistence`, `users`, `accounts`
+- **Priority**: Medium
+
+---
+
+### 🌐 6. Middleware & Route Protection
+- **Rule**: Protect pages and APIs with middleware or server-side checks.
+- **Best Practices**:
+  - Use `auth()` in `middleware.ts` to guard entire routes
+  - Use `getServerSession()` for SSR pages
+  - Redirect unauthenticated users where necessary
+- **Applies To**: `middleware`, `pages`, `access control`
+- **Priority**: High
+
+---
+
+### 👤 7. Custom Sign-In Flows
+- **Rule**: Customize sign-in UI and behavior to match product UX.
+- **Best Practices**:
+  - Create a custom `/login` page using `pages.auth.signIn`
+  - Handle errors and success messages clearly for users
+- **Applies To**: `ui`, `sign-in`, `UX`
+- **Priority**: Medium
+
+---
+
+### ✨ 8. User Experience
+- **Rule**: Avoid unnecessary redirects and give feedback during auth flows.
+- **Best Practices**:
+  - Use `loading` states on auth-dependent components
+  - Show personalized UI with session info from `useSession()`
+- **Applies To**: `components`, `auth`, `UX`
+- **Priority**: Medium
+
+---
+
+### 🔄 9. Keep Sessions Fresh
+- **Rule**: Handle token refresh logic gracefully to avoid user disruption.
+- **Best Practices**:
+  - Implement refresh tokens if using OAuth providers
+  - Update JWT tokens in `jwt` callback on every request if needed
+- **Applies To**: `token refresh`, `session`, `oauth`
+- **Priority**: Medium
+
+---
+
+### 📊 10. Logging & Debugging
+- **Rule**: Avoid exposing sensitive auth details in production logs.
+- **Best Practices**:
+  - Use `debug: true` only in development
+  - Sanitize all logs before pushing to services like Sentry or Datadog
+- **Applies To**: `debugging`, `logs`, `security`
+- **Priority**: Medium

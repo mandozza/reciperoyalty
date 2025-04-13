@@ -1,0 +1,124 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Rules for Next.js and React development
+globs: "*.tsx,*.ts"
+alwaysApply: true
+emoji: ⚛️
+title: Next.js & React Best Practices
+---
+
+# Cursor Rule: Next.js & React Best Practices
+
+## Description  
+Ensure clean, performant, and scalable code when working with React and Next.js. These rules cover components, routing, data fetching, state management, accessibility, and deployment.
+
+## Rules
+
+---
+
+### 🧱 1. Component Architecture
+- **Rule**: Favor small, reusable, composable components over large monoliths.
+- **Best Practices**:
+  - Use folder-per-component structure (`Button/index.tsx`, `Button/styles.ts`)
+  - Use `props` validation with TypeScript interfaces
+- **Applies To**: `components`, `ui`, `structure`
+- **Priority**: High
+
+---
+
+### ⚡ 2. Data Fetching
+- **Rule**: Use appropriate data fetching strategy per use case.
+- **Best Practices**:
+  - Use `fetch()` in `getServerSideProps` for SSR when dynamic
+  - Use `getStaticProps` for static content, revalidate with ISR
+  - For client-side, use **SWR** or **React Query**
+- **Applies To**: `pages`, `api`, `performance`
+- **Priority**: High
+
+---
+
+### 🛠 3. API Routes
+- **Rule**: Keep API logic modular and reusable.
+- **Best Practices**:
+  - Move business logic into services or utils, keep route files thin
+  - Validate inputs using Zod or Yup
+- **Applies To**: `api`, `backend`, `validation`
+- **Priority**: High
+
+---
+
+### 🎯 4. State Management
+- **Rule**: Use local state until it hurts. Reach for global solutions when needed.
+- **Best Practices**:
+  - `useState` / `useReducer` for component scope
+  - `context + useReducer` for simple global state
+  - Use Zustand or Jotai for scalable app state
+- **Applies To**: `hooks`, `context`, `stores`
+- **Priority**: Medium
+
+---
+
+### 🌐 5. Routing & Navigation
+- **Rule**: Use semantic URLs and dynamic routes where applicable.
+- **Best Practices**:
+  - Prefer `app/` directory (Next.js 13+) for routing and layouts
+  - Use `useRouter()` for programmatic navigation
+- **Applies To**: `pages`, `app directory`, `links`
+- **Priority**: High
+
+---
+
+### 🧼 6. Code Cleanliness & Conventions
+- **Rule**: Enforce consistent formatting and naming.
+- **Best Practices**:
+  - Use `eslint`, `prettier`, `typescript`, and strict mode
+  - Components: PascalCase, files: kebab-case, variables: camelCase
+- **Applies To**: `style`, `naming`, `linting`
+- **Priority**: High
+
+---
+
+### ♿ 7. Accessibility (a11y)
+- **Rule**: All interactive elements must be accessible via keyboard and screen readers.
+- **Best Practices**:
+  - Use semantic HTML (`<button>`, `<label>`, etc.)
+  - Always provide `alt`, `aria-label`, and keyboard navigation
+- **Applies To**: `ui`, `components`, `UX`
+- **Priority**: High
+
+---
+
+### 📦 8. Performance Optimization
+- **Rule**: Optimize both frontend and backend performance.
+- **Best Practices**:
+  - Use `next/image` for responsive image optimization
+  - Lazy-load components with `dynamic()` when needed
+  - Debounce expensive operations and use memoization
+- **Applies To**: `components`, `rendering`, `UX`
+- **Priority**: Medium
+
+---
+
+### 🔐 9. Security
+- **Rule**: Protect all sensitive operations and data.
+- **Best Practices**:
+  - Use `next-auth` or middleware for protected routes
+  - Sanitize all inputs (especially in API routes)
+  - Store secrets in `.env.local` and never hardcode
+- **Applies To**: `auth`, `api`, `env`
+- **Priority**: Critical
+
+---
+
+### 🚀 10. Deployment & Monitoring
+- **Rule**: Prepare code for production with reliability and observability in mind.
+- **Best Practices**:
+  - Use Netlify, or custom CI/CD pipelines
+  - Monitor with Sentry, LogRocket, or similar
+  - Enable source maps, and define custom error boundaries
+- **Applies To**: `devops`, `errors`, `hosting`
+- **Priority**: Medium

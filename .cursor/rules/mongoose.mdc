@@ -1,0 +1,71 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Rules for Mongoose schema and model design
+globs: "*/models/*,*/schemas/*"
+alwaysApply: true
+emoji: 🐘
+title: Mongoose Best Practices
+---
+
+# Mongoose Best Practices for Cursor
+
+## ✅ Naming Conventions
+- Use **PascalCase** for model names: `User`, `BlogPost`, not `user` or `blogpost`.
+- Use **camelCase** for field names in schemas: `firstName`, `createdAt`, not `First_name`.
+
+## ✅ Schema Definition
+- Always define a schema with `timestamps: true` unless you have a strong reason not to.
+- Group fields logically, and place `_id` and reference fields near the top for visibility.
+- Use `required`, `default`, `enum`, and `validate` to enforce data quality.
+- Avoid overly permissive schemas (e.g., avoid `type: Object` or `type: Mixed` unless absolutely needed).
+
+## ✅ Model Creation
+- Create models **once per connection** using `mongoose.models.ModelName || mongoose.model(...)` pattern to avoid OverwriteModelError in hot reload environments (like Next.js).
+
+## ✅ Relationships
+- Prefer using ObjectId references (`ref`) for relations between models.
+- Use `populate()` only when necessary — excessive populates can hurt performance.
+- For embedded subdocuments, define them using sub-schemas for readability and reuse.
+
+## ✅ Queries & Performance
+- Always `.lean()` read-only queries when you don't need Mongoose document methods.
+- Use indexes for frequently queried fields (`{ unique: true }`, `{ sparse: true }`, etc.).
+- Avoid using `await Model.find()` without filters — prefer `.limit()`, `.sort()`, and projections to reduce payload.
+
+## ✅ Data Validation
+- Enforce all core validations at the schema level.
+- Use `mongoose.SchemaType.validate` or custom functions for complex field rules.
+- Don't rely solely on frontend validation.
+
+## ✅ Error Handling
+- Always wrap async operations with `try/catch` or use `.catch()` on Promises.
+- Use meaningful error messages and status codes.
+- Handle common Mongoose errors like duplicate keys (code `11000`).
+
+## ✅ Updates
+- Avoid `Model.update()` and `Model.updateOne()` unless you know what you're doing.
+- Prefer `findOneAndUpdate()` with `{ new: true, runValidators: true }`.
+- Be cautious with `$set` and `$inc` — validate fields and types before updating.
+
+## ✅ Security
+- Never expose sensitive fields like `passwordHash` or internal `_id` fields in API responses.
+- Use `select: false` on schema fields that shouldn't be queried by default (e.g., `passwordHash`).
+- Sanitize inputs before inserting into the database (especially if using `req.body` directly).
+
+## ✅ Plugins & Middleware
+- Use plugins like `mongoose-unique-validator` or `mongoose-paginate-v2` where appropriate.
+- Avoid unnecessary pre/post hooks — they can complicate logic and reduce performance.
+- Use pre-save middleware sparingly, especially for tasks like hashing passwords.
+
+## ✅ Schema Evolution
+- Plan for versioning if the schema may evolve in a backward-incompatible way.
+- Use `mongoose.Schema.add()` sparingly — prefer migrating the schema explicitly.
+
+## ✅ Testing
+- Use `mongodb-memory-server` or similar to write fast, isolated tests.
+- Stub out database interactions in unit tests — avoid real database calls unless doing integration tests.
+- Always clean up models/data after each test case.

@@ -1,0 +1,119 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Rules for ShadCN UI components and styling
+globs: "*/components/*"
+alwaysApply: true
+emoji: 🎭
+title: ShadCN UI Best Practices
+---
+
+# Cursor Rule: ShadCN UI Best Practices
+
+## Description  
+Maintain consistency, accessibility, and performance when building interfaces with ShadCN UI. These rules apply to components, styling, accessibility, and customization using Tailwind CSS and Radix UI.
+
+## Rules
+
+---
+
+### 🎨 1. Consistent Design System
+- **Rule**: Use and extend the default ShadCN component system instead of creating redundant custom UI.
+- **Best Practices**:
+  - Stick to the built-in `@/components/ui/` library unless customization is required
+  - Extend components thoughtfully using `className` or `variants`
+- **Applies To**: `ui`, `components`, `design system`
+- **Priority**: High
+
+---
+
+### 🧩 2. Component Composition
+- **Rule**: Compose ShadCN components together rather than rewriting core logic.
+- **Best Practices**:
+  - Nest `Dialog`, `Popover`, `Tabs`, etc., properly using provided slots
+  - Use `asChild` prop to wrap custom triggers (e.g. `Button asChild`)
+- **Applies To**: `components`, `composition`, `ui`
+- **Priority**: High
+
+---
+
+### 🧼 3. Tailwind & Styling
+- **Rule**: Use Tailwind utility classes and `cn()` for styling ShadCN components.
+- **Best Practices**:
+  - Prefer Tailwind over inline or CSS Modules
+  - Use the `cn()` utility to merge classes conditionally
+- **Applies To**: `style`, `Tailwind`, `UI`
+- **Priority**: Medium
+
+---
+
+### ♿ 4. Accessibility
+- **Rule**: Preserve accessibility features built into ShadCN and Radix primitives.
+- **Best Practices**:
+  - Don’t remove focus states or ARIA roles unless absolutely necessary
+  - Ensure all interactive elements are reachable via keyboard
+- **Applies To**: `a11y`, `UX`, `components`
+- **Priority**: Critical
+
+---
+
+### ⚙️ 5. Variant Management
+- **Rule**: Define consistent variants using `cva()` in components that support it.
+- **Best Practices**:
+  - Store all component variants in a `variants.ts` or `utils.ts`
+  - Avoid hardcoding variants inside components
+- **Applies To**: `components`, `variants`, `style`
+- **Priority**: Medium
+
+---
+
+### 🧠 6. Theming
+- **Rule**: Implement and maintain dark/light theme support across all ShadCN components.
+- **Best Practices**:
+  - Use `class="dark"` with Tailwind’s dark mode utilities
+  - Ensure consistent contrast and readability in both themes
+- **Applies To**: `theme`, `ui`, `accessibility`
+- **Priority**: High
+
+---
+
+### 💡 7. Customization
+- **Rule**: Customize ShadCN components responsibly without breaking core structure or accessibility.
+- **Best Practices**:
+  - Use `forwardRef` when wrapping ShadCN components
+  - Maintain prop forwarding and className merging
+- **Applies To**: `components`, `custom`, `ui`
+- **Priority**: Medium
+
+---
+
+### 📁 8. Directory Structure
+- **Rule**: Store ShadCN components inside `@/components/ui/` and extendables in `@/components/custom/`.
+- **Best Practices**:
+  - Avoid polluting `ui/` with custom logic
+  - Group by purpose or atomic structure if scaling
+- **Applies To**: `components`, `structure`, `conventions`
+- **Priority**: Medium
+
+---
+
+### 🚫 9. Avoid Overengineering
+- **Rule**: Use ShadCN as intended instead of replacing with third-party UI kits unless justified.
+- **Best Practices**:
+  - Avoid combining ShadCN with MUI/Chakra/etc. in the same app
+  - Keep your UI stack focused and minimal
+- **Applies To**: `components`, `stack`, `performance`
+- **Priority**: Medium
+
+---
+
+### 📐 10. Layout & Spacing
+- **Rule**: Use Tailwind utilities for spacing and layout instead of custom CSS unless necessary.
+- **Best Practices**:
+  - Use consistent `p-`, `m-`, `gap-` values
+  - Prefer grid/flex with utility classes for layout control
+- **Applies To**: `layout`, `spacing`, `css`
+- **Priority**: Medium

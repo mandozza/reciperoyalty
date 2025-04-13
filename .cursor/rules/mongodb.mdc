@@ -1,0 +1,98 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Rules for MongoDB and database operations
+globs: "*/models/*,*/db/*"
+alwaysApply: true
+emoji: 🗃️
+title: MongoDB Best Practices
+---
+
+
+# Cursor Rule: MongoDB Best Practices
+
+## Description
+Enforce best practices for MongoDB usage in all code and schema design. These rules apply to collections, queries, indexing, and database architecture.
+
+## Rules
+
+### 🧠 1. Schema Design
+- **Rule**: Design schemas around application usage patterns, not just relational models.
+- **Examples**:
+  - Embed data for read-heavy, low-write scenarios (e.g. comments in posts).
+  - Reference data for high-volume writes or when documents exceed 16MB.
+- **Applies To**: `schema`, `model`, `data modeling`
+- **Priority**: High
+
+---
+
+### 🔑 2. Indexing
+- **Rule**: Always index fields that are filtered, sorted, or joined on frequently.
+- **Best Practices**:
+  - Use compound indexes for multi-field queries.
+  - Include TTL indexes for expiring data (e.g., sessions, temp tokens).
+- **Applies To**: `queries`, `collections`, `performance`
+- **Priority**: High
+
+---
+
+### 🔐 3. Security
+- **Rule**: Do not expose MongoDB URIs or credentials in code or logs.
+- **Best Practices**:
+  - Use environment variables (`MONGODB_URI`)
+  - Limit access to whitelisted IPs or use VPC peering
+  - Use role-based access control (RBAC) with least privilege
+- **Applies To**: `env`, `backend`, `devops`
+- **Priority**: Critical
+
+---
+
+### 📏 4. Naming Conventions
+- **Rule**: Use lowercase, singular collection names (e.g., `user`, `track`)
+- **Consistency**:
+  - Field names should be camelCase
+  - Use `_id` as primary key field unless special reason exists
+- **Applies To**: `schemas`, `collections`, `documents`
+- **Priority**: Medium
+
+---
+
+### 📊 5. Query Optimization
+- **Rule**: Avoid unindexed `$regex`, `$ne`, and `$nin` queries on large datasets
+- **Best Practices**:
+  - Use `.lean()` in Mongoose when you don't need full model instances
+  - Limit projections to only required fields (`.select('name bio')`)
+- **Applies To**: `queries`, `performance`
+- **Priority**: High
+
+---
+
+### 🧪 6. Data Validation
+- **Rule**: Validate inputs both on the backend and in schema definitions
+- **Best Practices**:
+  - Use Mongoose validators or Zod/Yup in your API layer
+  - Ensure required fields are present in all write operations
+- **Applies To**: `schema`, `api`, `backend`
+- **Priority**: High
+
+---
+
+### 🛑 7. Migration Safety
+- **Rule**: Never drop or rename collections in production without a migration plan
+- **Best Practices**:
+  - Use migration libraries like `migrate-mongo` or custom scripts with backup
+- **Applies To**: `devops`, `schema evolution`
+- **Priority**: High
+
+---
+
+### 📈 8. Monitoring & Performance
+- **Rule**: Enable performance monitoring for queries over 100ms
+- **Best Practices**:
+  - Use MongoDB Atlas monitoring
+  - Review slow queries regularly with logs or profiler
+- **Applies To**: `backend`, `database`
+- **Priority**: Medium
