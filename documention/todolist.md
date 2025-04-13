@@ -111,23 +111,23 @@
 - [x] Add loading states
 
 ### Loading States
-- [ ] Create LoadingSkeleton
-  - [ ] Card skeleton
-  - [ ] Text skeleton
-  - [ ] Avatar skeleton
-- [ ] Add shimmer effect
-- [ ] Create loading spinners
-- [ ] Implement progress bars
+- [x] Create LoadingSkeleton
+  - [x] Card skeleton
+  - [x] Text skeleton
+  - [x] Avatar skeleton
+- [x] Add shimmer effect
+- [x] Create loading spinners
+- [x] Implement progress bars
 
 ### Notification System
-- [ ] Build NotificationToast
-  - [ ] Success variant
-  - [ ] Error variant
-  - [ ] Warning variant
-  - [ ] Info variant
-- [ ] Add animations
-- [ ] Create notification queue
-- [ ] Add sound effects (optional)
+- [x] Build NotificationToast
+  - [x] Success variant
+  - [x] Error variant
+  - [x] Warning variant
+  - [x] Info variant
+- [x] Add animations
+- [x] Create notification queue
+- [x] Add sound effects (optional)
 
 ### Theme System
 - [ ] Set up theme provider

@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { NotificationContainer } from "@/components/ui/notification-container";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +40,7 @@ export default function RootLayout({
           {children}
           <Toaster />
           <ModalProvider />
+          <NotificationContainer />
         </ThemeProvider>
       </body>
     </html>
