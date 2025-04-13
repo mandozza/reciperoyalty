@@ -2,11 +2,47 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { UserAvatar } from "@/components/ui/user-avatar";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
-import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { z } from "zod";
+import { UserAvatar } from "../ui/user-avatar";
+import { Button } from "../ui/button";
+import { Icons } from "../ui/icons";
+import { cn } from "../../lib/utils";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Pencil1Icon } from "@radix-ui/react-icons";
+import { updateProfile } from "../../lib/api/user";
+import { User } from "../../types/user";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Separator } from "../ui/separator";
+
+const profileSchema = z.object({
+  bio: z
+    .string()
+    .min(3, "Bio must be at least 3 characters")
+    .max(500, "Bio must be less than 500 characters")
+    .refine(
+      (bio) => {
+        const words = bio.trim().split(/\s+/);
+        return words.length <= 100;
+      },
+      { message: "Bio cannot exceed 100 words" }
+    )
+    .refine(
+      (bio) => !bio.includes("http") && !bio.includes("www."),
+      { message: "Bio cannot contain URLs" }
+    )
+    .refine(
+      (bio) => !/[<>{}]/.test(bio),
+      { message: "Bio cannot contain HTML or special characters" }
+    )
+    .transform((bio) => bio.trim()),
+});
+
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface UserProfileHeaderProps {
   user: {
@@ -24,41 +60,132 @@ interface UserProfileHeaderProps {
   isOwnProfile?: boolean;
 }
 
+interface UserAvatarProps {
+  user: {
+    name: string;
+    image?: string;
+  };
+  className?: string;
+}
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
+function validateAndOptimizeImage(file: File): { isValid: boolean; error?: string; file?: File } {
+  if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+    return {
+      isValid: false,
+      error: "Please upload a valid image file (JPEG, PNG, WebP, or GIF)",
+    };
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    return {
+      isValid: false,
+      error: "Image size must be less than 5MB",
+    };
+  }
+
+  // Create a new optimized file with a unique name to prevent caching
+  const timestamp = Date.now();
+  const optimizedFileName = `${file.name.split(".")[0]}_${timestamp}.${file.name.split(".").pop()}`;
+
+  const optimizedFile = new File([file], optimizedFileName, {
+    type: file.type,
+    lastModified: Date.now(),
+  });
+
+  return {
+    isValid: true,
+    file: optimizedFile,
+  };
+}
+
 export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHeaderProps) {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const { toast } = useToast();
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      bio: user.bio || "",
+    },
+  });
 
   async function handleCoverImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      toast({
-        variant: "destructive",
-        title: "Invalid file type",
-        description: "Please upload an image file.",
-      });
+    const validation = validateAndOptimizeImage(file);
+    if (!validation.isValid) {
+      toast.error(validation.error);
       return;
     }
 
     setIsUploading(true);
-    // TODO: Implement actual image upload to storage
     try {
-      // Simulated upload delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast({
-        title: "Cover image updated",
-        description: "Your profile cover image has been updated successfully.",
+      const formData = new FormData();
+      formData.append("file", validation.file!);
+      formData.append("type", "cover");
+
+      const response = await fetch(`/api/users/${user.id}/upload`, {
+        method: "POST",
+        body: formData,
       });
+
+      if (!response.ok) throw new Error("Failed to upload image");
+
+      const data = await response.json();
+      toast.success("Cover image updated successfully");
+      router.refresh();
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to upload cover image. Please try again.",
-      });
+      toast.error("Failed to upload cover image. Please try again.");
     } finally {
       setIsUploading(false);
+    }
+  }
+
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const validation = validateAndOptimizeImage(file);
+    if (!validation.isValid) {
+      toast.error(validation.error);
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", validation.file!);
+      formData.append("type", "avatar");
+
+      const response = await fetch(`/api/users/${user.id}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Failed to upload image");
+
+      const data = await response.json();
+      toast.success("Avatar updated successfully");
+      router.refresh();
+    } catch (error) {
+      toast.error("Failed to upload avatar. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  async function onSubmit(data: ProfileFormValues) {
+    try {
+      await updateProfile(user.id, data);
+      setIsEditing(false);
+      toast.success("Profile updated successfully");
+      router.refresh();
+    } catch (error) {
+      toast.error("Failed to update profile. Please try again.");
     }
   }
 
@@ -113,7 +240,7 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
             <div className="relative">
               <UserAvatar
                 user={{ name: user.name, image: user.image }}
-                className="h-32 w-32 rounded-full border-4 border-background"
+                className="h-20 w-20"
               />
               {isOwnProfile && (
                 <label
@@ -126,6 +253,8 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
                     type="file"
                     accept="image/*"
                     className="hidden"
+                    onChange={handleAvatarUpload}
+                    disabled={isUploading}
                   />
                 </label>
               )}
@@ -149,14 +278,15 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
           </div>
 
           {/* Name and Bio */}
-          <div className="mt-6 min-w-0 flex-1 sm:mt-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 min-w-0 flex-1 sm:mt-8">
             <div className="flex items-center justify-between">
               <h1 className="truncate text-2xl font-bold">{user.name}</h1>
               {isOwnProfile && (
                 <Button
+                  type={isEditing ? "submit" : "button"}
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsEditing(!isEditing)}
+                  onClick={() => !isEditing && setIsEditing(true)}
                 >
                   {isEditing ? "Save Profile" : "Edit Profile"}
                 </Button>
@@ -164,19 +294,26 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
             </div>
             <div className="mt-4">
               {isEditing ? (
-                <textarea
-                  className="w-full resize-none rounded-md border bg-background px-3 py-2 text-sm"
-                  rows={3}
-                  placeholder="Write a bio..."
-                  defaultValue={user.bio}
-                />
+                <div>
+                  <textarea
+                    {...form.register("bio")}
+                    className="w-full resize-none rounded-md border bg-background px-3 py-2 text-sm"
+                    rows={3}
+                    placeholder="Write a bio..."
+                  />
+                  {form.formState.errors.bio && (
+                    <p className="mt-1 text-sm text-destructive">
+                      {form.formState.errors.bio.message}
+                    </p>
+                  )}
+                </div>
               ) : (
                 <p className="text-muted-foreground">
                   {user.bio || (isOwnProfile && "Add a bio to your profile")}
                 </p>
               )}
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

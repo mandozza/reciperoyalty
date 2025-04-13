@@ -1,31 +1,27 @@
 "use client";
 
-import { AvatarProps } from "@radix-ui/react-avatar";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Icons } from "@/components/ui/icons";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
-export interface UserAvatarProps extends AvatarProps {
+export interface UserAvatarProps {
   user: {
-    name?: string | null;
-    image?: string | null;
+    name: string;
+    image?: string;
   };
   className?: string;
 }
 
-export function UserAvatar({ user, className, ...props }: UserAvatarProps) {
+export function UserAvatar({ user, className }: UserAvatarProps) {
   return (
-    <Avatar className={className} {...props}>
-      {user.image ? (
-        <AvatarImage
-          alt={`${user.name || 'User'}'s avatar`}
-          src={user.image}
-        />
-      ) : (
-        <AvatarFallback>
-          <span className="sr-only">{user.name}</span>
-          <Icons.user className="h-4 w-4" />
-        </AvatarFallback>
-      )}
+    <Avatar className={cn("", className)}>
+      <AvatarImage src={user.image} alt={user.name} />
+      <AvatarFallback>
+        {user.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()}
+      </AvatarFallback>
     </Avatar>
   );
 }
