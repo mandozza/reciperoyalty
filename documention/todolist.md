@@ -20,14 +20,19 @@
 - [x] Set up MongoDB Atlas cluster
 - [x] Configure Mongoose
   - [x] Create connection utility
-  - [ ] Set up models
-  - [ ] Configure indexes
-- [ ] Create database schemas
-  - [ ] User schema
-  - [ ] Recipe schema
-  - [ ] Comment schema
-  - [ ] Cookbook schema
-  - [ ] MealPlan schema
+  - [x] Set up models
+  - [x] Configure indexes
+- [x] Create database schemas
+  - [x] User schema
+    [x] User seed data
+  - [x] Recipe schema
+    [x] Recipe seed data
+  - [x] Comment schema
+  - [x] Comment seed data
+  - [x] Cookbook schema
+    [x] Cookbook seed data
+  - [x] MealPlan schema
+    [x] MealPlan seed data
 
 ### Authentication Setup
 - [ ] Configure NextAuth.js
