@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 👑 Recipe Royalty
 
-## Getting Started
+A modern recipe sharing and meal planning platform built with Next.js 14, MongoDB, and TypeScript.
 
-First, run the development server:
+## 🚀 Features
 
+- 📱 Modern, responsive UI built with ShadcnUI and Tailwind CSS
+- 🔐 Secure authentication with NextAuth.js (Email & Google OAuth)
+- 📦 MongoDB database with Mongoose ODM
+- 🌙 Dark mode support
+- 📱 Mobile-first design
+- ♿ Accessibility focused
+- 🎨 Component library with Storybook
+- ✨ Type-safe with TypeScript
+
+## 🛠 Tech Stack
+
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Auth:** NextAuth.js
+- **Database:** MongoDB with Mongoose
+- **Styling:** Tailwind CSS + ShadcnUI
+- **Components:** Storybook
+- **Validation:** Zod
+- **Linting:** ESLint + Prettier
+- **Testing:** Jest (coming soon)
+
+## 📦 Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/recipe-royalty.git
+cd recipe-royalty
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Update `.env.local` with your values:
+- Generate NextAuth secret: `openssl rand -base64 32`
+- Set up MongoDB database
+- Configure Google OAuth credentials
+- Set up email provider
 
-## Learn More
+5. Start the development server:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🌍 Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Required environment variables:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# NextAuth.js
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
 
-## Deploy on Vercel
+# MongoDB
+MONGODB_URI=your-mongodb-uri
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Google OAuth
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Email Provider
+EMAIL_SERVER_HOST=smtp.example.com
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER=your-email-user
+EMAIL_SERVER_PASSWORD=your-email-password
+EMAIL_FROM=noreply@example.com
+```
+
+## 📝 Development
+
+### Commands
+
+- `npm run dev` - Start development server
+- `npm run build` - Build production bundle
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run storybook` - Start Storybook server
+- `npm run test` - Run tests (coming soon)
+
+### Project Structure
+
+```
+src/
+├── app/                 # Next.js App Router pages
+├── components/         # React components
+│   ├── ui/            # ShadcnUI components
+│   └── ...            # Feature components
+├── lib/               # Utilities and configurations
+├── models/            # Mongoose models
+├── types/             # TypeScript types
+├── hooks/             # Custom React hooks
+└── stories/           # Storybook stories
+```
+
+### Environment Modes
+
+- **Development**: `.env.development` - Local development settings
+- **Production**: `.env.production` - Production settings
+- **Testing**: `.env.test` - Test environment settings
+
+## 🧪 Testing
+
+Coming soon:
+- Unit tests with Jest
+- Integration tests
+- E2E tests with Cypress
+
+## 📚 Documentation
+
+- Component documentation available in Storybook
+- API documentation (coming soon)
+- Database schema documentation (coming soon)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Next.js](https://nextjs.org/)
+- [ShadcnUI](https://ui.shadcn.com/)
+- [NextAuth.js](https://next-auth.js.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
