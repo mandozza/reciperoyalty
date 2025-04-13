@@ -130,14 +130,14 @@
 - [x] Add sound effects (optional)
 
 ### Theme System
-- [ ] Set up theme provider
-- [ ] Create theme switcher
-- [ ] Define color schemes
-  - [ ] Light theme
-  - [ ] Dark theme
-- [ ] Add system preference detection
-- [ ] Create theme variables
-- [ ] Add theme persistence
+- [x] Set up theme provider
+- [x] Create theme switcher
+- [x] Define color schemes
+  - [x] Light theme
+  - [x] Dark theme
+- [x] Add system preference detection
+- [x] Create theme variables
+- [x] Add theme persistence
 
 ### Layout Components
 #### Mobile Navigation
