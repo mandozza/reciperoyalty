@@ -94,21 +94,21 @@
 - [x] Add accessibility features
 
 ### Form Components
-- [ ] Create base Input component
-  - [ ] Text input
-  - [ ] Number input
-  - [ ] Password input
-  - [ ] Search input
-- [ ] Create TextArea component
-- [ ] Build FileUpload component
-  - [ ] Image upload
-  - [ ] Video upload
-  - [ ] Drag and drop
-- [ ] Create Select component
-- [ ] Build Checkbox and Radio
-- [ ] Add form validation
-- [ ] Implement error states
-- [ ] Add loading states
+- [x] Create base Input component
+  - [x] Text input
+  - [x] Number input
+  - [x] Password input
+  - [x] Search input
+- [x] Create TextArea component
+- [x] Build FileUpload component
+  - [x] Image upload
+  - [x] Video upload
+  - [x] Drag and drop
+- [x] Create Select component
+- [x] Build Checkbox and Radio
+- [x] Add form validation
+- [x] Implement error states
+- [x] Add loading states
 
 ### Loading States
 - [ ] Create LoadingSkeleton
