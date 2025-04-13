@@ -22,6 +22,7 @@ import {
   type LucideIcon,
   LucideProps,
   Twitter,
+  Camera,
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -52,4 +53,5 @@ export const Icons = {
   google: ({ ...props }: LucideProps) => (
     <FcGoogle {...props} />
   ),
+  camera: Camera,
 } as const;

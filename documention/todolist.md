@@ -212,11 +212,11 @@
 - [x] Add hover card
 
 #### Profile Components
-- [ ] Create UserProfileHeader
-  - [ ] Cover image
-  - [ ] Avatar
-  - [ ] Bio
-  - [ ] Stats
+- [x] Create UserProfileHeader
+  - [x] Cover image
+  - [x] Avatar
+  - [x] Bio
+  - [x] Stats
 - [ ] Add edit functionality
 - [ ] Create profile tabs
 - [ ] Add activity feed
