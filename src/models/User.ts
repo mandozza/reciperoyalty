@@ -11,6 +11,7 @@ export const UserValidation = z.object({
   bio: z.string().max(500).optional(),
   followers: z.array(z.string()).optional(),
   following: z.array(z.string()).optional(),
+  blockedUsers: z.array(z.string()).optional(),
 });
 
 // TypeScript interface for the User document
@@ -23,6 +24,7 @@ export interface IUser extends Document {
   bio?: string;
   followers: mongoose.Types.ObjectId[];
   following: mongoose.Types.ObjectId[];
+  blockedUsers: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 
@@ -32,6 +34,10 @@ export interface IUser extends Document {
   isFollowing(userId: mongoose.Types.ObjectId): boolean;
   getFollowersCount(): number;
   getFollowingCount(): number;
+  block(userId: mongoose.Types.ObjectId): Promise<void>;
+  unblock(userId: mongoose.Types.ObjectId): Promise<void>;
+  isBlocked(userId: mongoose.Types.ObjectId): boolean;
+  isBlockedBy(userId: mongoose.Types.ObjectId): Promise<boolean>;
 }
 
 // Mongoose schema definition
@@ -95,6 +101,10 @@ const UserSchema = new Schema<IUser>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     }],
+    blockedUsers: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    }],
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields
@@ -152,6 +162,53 @@ UserSchema.methods.getFollowersCount = function(): number {
 
 UserSchema.methods.getFollowingCount = function(): number {
   return this.following.length;
+};
+
+// Block/Unblock methods
+UserSchema.methods.block = async function(userId: mongoose.Types.ObjectId): Promise<void> {
+  if (userId.equals(this._id)) {
+    throw new Error('Cannot block yourself');
+  }
+
+  if (this.blockedUsers.some((id: mongoose.Types.ObjectId) => id.equals(userId))) {
+    throw new Error('User is already blocked');
+  }
+
+  // Add to blocked users
+  this.blockedUsers.push(userId);
+
+  // Remove from following/followers if exists
+  this.following = this.following.filter((id: mongoose.Types.ObjectId) => !id.equals(userId));
+  this.followers = this.followers.filter((id: mongoose.Types.ObjectId) => !id.equals(userId));
+
+  await this.save();
+
+  // Remove from other user's following/followers
+  await this.model('User').findByIdAndUpdate(userId, {
+    $pull: {
+      followers: this._id,
+      following: this._id
+    }
+  });
+};
+
+UserSchema.methods.unblock = async function(userId: mongoose.Types.ObjectId): Promise<void> {
+  if (!this.blockedUsers.some((id: mongoose.Types.ObjectId) => id.equals(userId))) {
+    throw new Error('User is not blocked');
+  }
+
+  this.blockedUsers = this.blockedUsers.filter((id: mongoose.Types.ObjectId) => !id.equals(userId));
+  await this.save();
+};
+
+UserSchema.methods.isBlocked = function(userId: mongoose.Types.ObjectId): boolean {
+  return this.blockedUsers.some((id: mongoose.Types.ObjectId) => id.equals(userId));
+};
+
+UserSchema.methods.isBlockedBy = async function(userId: mongoose.Types.ObjectId): Promise<boolean> {
+  const otherUser = await this.model('User').findById(userId);
+  if (!otherUser) return false;
+  return otherUser.blockedUsers.some((id: mongoose.Types.ObjectId) => id.equals(this._id));
 };
 
 // Indexes for better query performance

@@ -5,6 +5,8 @@ export interface User {
   image?: string;
   coverImage?: string;
   bio?: string;
+  isFollowing?: boolean;
+  isBlocked?: boolean;
   stats: {
     recipes: number;
     followers: number;
@@ -33,6 +35,13 @@ export interface User {
     followersCount: number;
   }>;
   following: Array<{
+    id: string;
+    name: string;
+    image?: string;
+    recipesCount: number;
+    followersCount: number;
+  }>;
+  blockedUsers?: Array<{
     id: string;
     name: string;
     image?: string;

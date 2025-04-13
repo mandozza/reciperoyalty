@@ -18,6 +18,7 @@ import { updateProfile } from "../../lib/api/user";
 import { User } from "../../types/user";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Separator } from "../ui/separator";
+import { FollowButton } from "@/components/social/follow-button";
 
 const profileSchema = z.object({
   bio: z
@@ -56,6 +57,7 @@ interface UserProfileHeaderProps {
       followers: number;
       following: number;
     };
+    isFollowing: boolean;
   };
   isOwnProfile?: boolean;
 }
@@ -236,30 +238,30 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="relative -mt-16 pb-8">
           {/* Avatar */}
-          <div className="flex items-end space-x-5">
-            <div className="relative">
-              <UserAvatar
-                user={{ name: user.name, image: user.image }}
-                className="h-20 w-20"
-              />
-              {isOwnProfile && (
-                <label
-                  htmlFor="avatar-upload"
-                  className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow hover:bg-primary/90"
-                >
-                  <Icons.camera className="h-4 w-4" />
-                  <input
-                    id="avatar-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleAvatarUpload}
-                    disabled={isUploading}
-                  />
-                </label>
-              )}
-            </div>
-            <div className="flex min-w-0 flex-1 items-center justify-end space-x-6">
+          <div className="flex items-end justify-between">
+            <div className="flex items-end space-x-5">
+              <div className="relative">
+                <UserAvatar
+                  user={{ name: user.name, image: user.image }}
+                  className="h-20 w-20"
+                />
+                {isOwnProfile && (
+                  <label
+                    htmlFor="avatar-upload"
+                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow hover:bg-primary/90"
+                  >
+                    <Icons.camera className="h-4 w-4" />
+                    <input
+                      id="avatar-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAvatarUpload}
+                      disabled={isUploading}
+                    />
+                  </label>
+                )}
+              </div>
               <div className="flex space-x-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold">{user.stats.recipes}</div>
@@ -275,6 +277,14 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
                 </div>
               </div>
             </div>
+            {!isOwnProfile && (
+              <FollowButton
+                userId={user.id}
+                isFollowing={user.isFollowing}
+                followersCount={user.stats.followers}
+                size="lg"
+              />
+            )}
           </div>
 
           {/* Name and Bio */}

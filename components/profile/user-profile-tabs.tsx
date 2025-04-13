@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RecipeCard } from "@/components/recipes/recipe-card";
 import { CookbookCard } from "@/components/cookbooks/cookbook-card";
-import { UserCard } from "@/components/ui/user-card";
+import { FollowerList } from "@/components/social/follower-list";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -27,14 +27,6 @@ function TabSkeleton() {
           </div>
         ))}
       </div>
-    </div>
-  );
-}
-
-function EmptyState({ message }: { message: string }) {
-  return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center space-y-3">
-      <p className="text-center text-sm text-muted-foreground">{message}</p>
     </div>
   );
 }
@@ -85,7 +77,9 @@ export function UserProfileTabs({
             ))}
           </div>
         ) : (
-          <EmptyState message="No recipes yet" />
+          <div className="flex h-[400px] items-center justify-center">
+            <p className="text-sm text-muted-foreground">No recipes yet</p>
+          </div>
         )}
       </TabsContent>
 
@@ -101,44 +95,36 @@ export function UserProfileTabs({
             ))}
           </div>
         ) : (
-          <EmptyState message="No cookbooks yet" />
+          <div className="flex h-[400px] items-center justify-center">
+            <p className="text-sm text-muted-foreground">No cookbooks yet</p>
+          </div>
         )}
       </TabsContent>
 
       <TabsContent value="followers" className="mt-6 min-h-[400px]">
-        {user.followers.length > 0 ? (
-          <ScrollArea className="h-[400px] rounded-md border p-4">
-            <div className="space-y-4">
-              {user.followers.map((follower) => (
-                <UserCard
-                  key={follower.id}
-                  user={follower}
-                  className="transition-transform hover:scale-[1.01]"
-                />
-              ))}
-            </div>
-          </ScrollArea>
-        ) : (
-          <EmptyState message="No followers yet" />
-        )}
+        <FollowerList
+          users={user.followers.map(follower => ({
+            id: follower.id,
+            name: follower.name,
+            image: follower.image,
+            recipesCount: follower.recipesCount,
+            followersCount: follower.followersCount,
+          }))}
+          emptyMessage="No followers yet"
+        />
       </TabsContent>
 
       <TabsContent value="following" className="mt-6 min-h-[400px]">
-        {user.following.length > 0 ? (
-          <ScrollArea className="h-[400px] rounded-md border p-4">
-            <div className="space-y-4">
-              {user.following.map((followed) => (
-                <UserCard
-                  key={followed.id}
-                  user={followed}
-                  className="transition-transform hover:scale-[1.01]"
-                />
-              ))}
-            </div>
-          </ScrollArea>
-        ) : (
-          <EmptyState message="Not following anyone yet" />
-        )}
+        <FollowerList
+          users={user.following.map(following => ({
+            id: following.id,
+            name: following.name,
+            image: following.image,
+            recipesCount: following.recipesCount,
+            followersCount: following.followersCount,
+          }))}
+          emptyMessage="Not following anyone yet"
+        />
       </TabsContent>
     </Tabs>
   );

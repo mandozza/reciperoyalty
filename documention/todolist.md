@@ -217,17 +217,27 @@
   - [x] Avatar
   - [x] Bio
   - [x] Stats
-- [ ] Add edit functionality
-- [ ] Create profile tabs
+- [x] Add edit functionality
+- [x] Create profile tabs
+  - [x] Recipes tab with RecipeCard
+  - [x] Cookbooks tab with CookbookCard
+  - [x] Followers tab with UserCard
+  - [x] Following tab with UserCard
+  - [x] Loading states
+  - [x] Empty states
 - [ ] Add activity feed
 
 #### Social Components
-- [ ] Build FollowButton
-  - [ ] Follow states
-  - [ ] Counter
-  - [ ] Loading state
-- [ ] Create follower list
-- [ ] Add blocking functionality
+- [x] Build FollowButton
+  - [x] Follow states
+  - [x] Counter
+  - [x] Loading state
+- [x] Create follower list
+  - [x] Search functionality
+  - [x] Loading states
+  - [x] Empty states
+  - [x] Responsive design
+- [x] Add blocking functionality
 - [ ] Implement notifications
 
 ### User Settings
