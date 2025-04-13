@@ -35,13 +35,17 @@
     [x] MealPlan seed data
 
 ### Authentication Setup
-- [ ] Configure NextAuth.js
-  - [ ] Set up Email provider
-  - [ ] Set up Google OAuth
-  - [ ] Configure JWT settings
-  - [ ] Set up session handling
-- [ ] Create auth middleware
-- [ ] Set up protected routes
+- [x] Configure NextAuth.js
+  - [x] Set up Email provider
+  - [x] Set up Google OAuth
+  - [x] Configure JWT settings
+  - [x] Set up session handling
+- [x] Create auth middleware
+- [x] Set up protected routes
+  - [x] Sign in page
+  - [x] Verify request page
+  - [x] Sign out page
+  - [x] Error page
 
 ### Development Environment
 - [x] Initialize Storybook
