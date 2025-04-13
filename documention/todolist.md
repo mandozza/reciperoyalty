@@ -241,14 +241,14 @@
 - [x] Implement notifications
 
 ### User Settings
-- [ ] Create settings page
-  - [ ] Profile settings
-  - [ ] Account settings
-  - [ ] Notification settings
-  - [ ] Privacy settings
-- [ ] Add email preferences
-- [ ] Create data export
-- [ ] Add account deletion
+- [x] Create settings page
+  - [x] Profile settings
+  - [x] Account settings
+  - [x] Notification settings
+  - [x] Privacy settings
+- [x] Add email preferences
+- [x] Create data export
+- [x] Add account deletion
 
 ## 📱 Phase 4: Feed & Social Features
 ### Card Components
