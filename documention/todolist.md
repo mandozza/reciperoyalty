@@ -225,7 +225,7 @@
   - [x] Following tab with UserCard
   - [x] Loading states
   - [x] Empty states
-- [ ] Add activity feed
+- [x] Add activity feed
 
 #### Social Components
 - [x] Build FollowButton
@@ -238,7 +238,7 @@
   - [x] Empty states
   - [x] Responsive design
 - [x] Add blocking functionality
-- [ ] Implement notifications
+- [x] Implement notifications
 
 ### User Settings
 - [ ] Create settings page

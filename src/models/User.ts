@@ -18,13 +18,19 @@ export const UserValidation = z.object({
 export interface IUser extends Document {
   name: string;
   email: string;
-  password: string;
+  image?: string;
   emailVerified?: Date;
+  password?: string;
+  accounts: any[];
+  sessions: any[];
   avatar?: string;
   bio?: string;
   followers: mongoose.Types.ObjectId[];
   following: mongoose.Types.ObjectId[];
   blockedUsers: mongoose.Types.ObjectId[];
+  favoriteRecipes: mongoose.Types.ObjectId[];
+  dietaryPreferences: string[];
+  cookingSkillLevel: 'beginner' | 'intermediate' | 'advanced';
   createdAt: Date;
   updatedAt: Date;
 
@@ -38,6 +44,9 @@ export interface IUser extends Document {
   unblock(userId: mongoose.Types.ObjectId): Promise<void>;
   isBlocked(userId: mongoose.Types.ObjectId): boolean;
   isBlockedBy(userId: mongoose.Types.ObjectId): Promise<boolean>;
+  addFavoriteRecipe(recipeId: mongoose.Types.ObjectId): Promise<void>;
+  removeFavoriteRecipe(recipeId: mongoose.Types.ObjectId): Promise<void>;
+  hasFavoriteRecipe(recipeId: mongoose.Types.ObjectId): boolean;
 }
 
 // Mongoose schema definition
@@ -63,16 +72,19 @@ const UserSchema = new Schema<IUser>(
         message: 'Please enter a valid email address',
       },
     },
+    image: String,
+    emailVerified: {
+      type: Date,
+      default: null,
+    },
     password: {
       type: String,
       required: [true, 'Password is required'],
       minlength: [8, 'Password must be at least 8 characters long'],
       select: false, // Don't include password in query results by default
     },
-    emailVerified: {
-      type: Date,
-      default: null,
-    },
+    accounts: [{ type: Schema.Types.ObjectId, ref: "Account" }],
+    sessions: [{ type: Schema.Types.ObjectId, ref: "Session" }],
     avatar: {
       type: String,
       validate: {
@@ -105,6 +117,20 @@ const UserSchema = new Schema<IUser>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     }],
+    favoriteRecipes: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Recipe',
+    }],
+    dietaryPreferences: [{
+      type: String,
+      enum: ['vegan', 'vegetarian', 'pescatarian', 'gluten-free', 'dairy-free', 'keto', 'paleo'],
+      default: [],
+    }],
+    cookingSkillLevel: {
+      type: String,
+      enum: ['beginner', 'intermediate', 'advanced'],
+      default: 'beginner',
+    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields
@@ -209,6 +235,25 @@ UserSchema.methods.isBlockedBy = async function(userId: mongoose.Types.ObjectId)
   const otherUser = await this.model('User').findById(userId);
   if (!otherUser) return false;
   return otherUser.blockedUsers.some((id: mongoose.Types.ObjectId) => id.equals(this._id));
+};
+
+// Add methods for recipe interactions
+UserSchema.methods.addFavoriteRecipe = async function(recipeId: mongoose.Types.ObjectId): Promise<void> {
+  if (!this.favoriteRecipes.some((id: mongoose.Types.ObjectId) => id.equals(recipeId))) {
+    this.favoriteRecipes.push(recipeId);
+    await this.save();
+  }
+};
+
+UserSchema.methods.removeFavoriteRecipe = async function(recipeId: mongoose.Types.ObjectId): Promise<void> {
+  if (this.favoriteRecipes.some((id: mongoose.Types.ObjectId) => id.equals(recipeId))) {
+    this.favoriteRecipes = this.favoriteRecipes.filter((id: mongoose.Types.ObjectId) => !id.equals(recipeId));
+    await this.save();
+  }
+};
+
+UserSchema.methods.hasFavoriteRecipe = function(recipeId: mongoose.Types.ObjectId): boolean {
+  return this.favoriteRecipes.some((id: mongoose.Types.ObjectId) => id.equals(recipeId));
 };
 
 // Indexes for better query performance
