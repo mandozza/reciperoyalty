@@ -141,21 +141,21 @@
 
 ### Layout Components
 #### Mobile Navigation
-- [ ] Create BottomNavBar
-  - [ ] Tab items
-  - [ ] Active states
-  - [ ] Animations
-  - [ ] Badge support
-- [ ] Add swipe gestures
-- [ ] Handle deep linking
+- [x] Create BottomNavBar
+  - [x] Tab items
+  - [x] Active states
+  - [x] Animations
+  - [x] Badge support
+- [x] Add swipe gestures
+- [x] Handle deep linking
 
 #### Desktop Navigation
-- [ ] Build SidebarNav
-  - [ ] Collapsible sections
-  - [ ] Active states
-  - [ ] Nested items
-- [ ] Add keyboard shortcuts
-- [ ] Create breadcrumbs
+- [x] Build SidebarNav
+  - [x] Collapsible sections
+  - [x] Active states
+  - [x] Nested items
+- [x] Add keyboard shortcuts
+- [x] Create breadcrumbs
 
 #### Responsive Layout
 - [ ] Create layout wrapper
