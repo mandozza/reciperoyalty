@@ -1,120 +1,126 @@
+"use client"
+
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
-export interface Reaction {
-  emoji: string;
-  label: string;
-  count: number;
+export type Reaction = {
+  type: 'like' | 'love' | 'haha' | 'wow' | 'sad' | 'angry'
+  count: number
+  reacted?: boolean
 }
 
-export interface ReactionBarProps {
-  reactions: Reaction[];
-  onReact?: (emoji: string) => void;
-  onRemoveReaction?: (emoji: string) => void;
-  userReactions?: string[];
-  className?: string;
+interface ReactionBarProps {
+  reactions: Reaction[]
+  onReact: (type: Reaction['type']) => void
+  className?: string
 }
 
-const DEFAULT_REACTIONS = [
-  { emoji: "👍", label: "Like" },
-  { emoji: "❤️", label: "Love" },
-  { emoji: "😋", label: "Yummy" },
-  { emoji: "👨‍🍳", label: "Chef's Kiss" },
-  { emoji: "🔥", label: "Fire" },
-  { emoji: "⭐", label: "Star" },
-];
+const reactionEmojis = {
+  like: '👍',
+  love: '❤️',
+  haha: '😂',
+  wow: '😮',
+  sad: '😢',
+  angry: '😠'
+}
 
-/**
- * ReactionBar component for displaying and managing emoji reactions
- */
-export function ReactionBar({
-  reactions,
-  onReact,
-  onRemoveReaction,
-  userReactions = [],
-  className,
-}: ReactionBarProps) {
-  const [showPicker, setShowPicker] = useState(false);
+const reactionLabels = {
+  like: 'Like',
+  love: 'Love',
+  haha: 'Haha',
+  wow: 'Wow',
+  sad: 'Sad',
+  angry: 'Angry'
+}
 
-  const handleReaction = (emoji: string) => {
-    if (userReactions.includes(emoji)) {
-      onRemoveReaction?.(emoji);
-    } else {
-      onReact?.(emoji);
+export function ReactionBar({ reactions, onReact, className = '' }: ReactionBarProps) {
+  const [showPicker, setShowPicker] = useState(false)
+
+  const formatReactionSummary = (reactions: Reaction[]) => {
+    const activeReactions = reactions.filter(r => r.count > 0)
+    if (activeReactions.length === 0) return ''
+
+    if (activeReactions.length === 1) {
+      const reaction = activeReactions[0]
+      return `${reaction.count} ${reactionLabels[reaction.type]}${reaction.count > 1 ? 's' : ''}`
     }
-    setShowPicker(false);
-  };
+
+    if (activeReactions.length === 2) {
+      return `${activeReactions[0].count} ${reactionLabels[activeReactions[0].type]}${activeReactions[0].count > 1 ? 's' : ''} and ${activeReactions[1].count} ${reactionLabels[activeReactions[1].type]}${activeReactions[1].count > 1 ? 's' : ''}`
+    }
+
+    const first = activeReactions[0]
+    const second = activeReactions[1]
+    const remaining = activeReactions.length - 2
+    return `${first.count} ${reactionLabels[first.type]}${first.count > 1 ? 's' : ''}, ${second.count} ${reactionLabels[second.type]}${second.count > 1 ? 's' : ''} and ${remaining} other${remaining > 1 ? 's' : ''}`
+  }
+
+  const getDetailedReactionSummary = () => {
+    return reactions
+      .filter(r => r.count > 0)
+      .map(r => `${r.count} ${reactionLabels[r.type]}${r.count > 1 ? 's' : ''}`)
+      .join('\n')
+  }
 
   return (
-    <div className={cn("flex items-center gap-2 flex-wrap", className)}>
-      <AnimatePresence>
-        {reactions.map((reaction) => (
-          <motion.div
-            key={reaction.emoji}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            className="relative"
-          >
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "flex items-center gap-1 px-3 py-1 h-8 transition-colors",
-                userReactions.includes(reaction.emoji) &&
-                "bg-primary/10 border-primary/20"
-              )}
-              onClick={() => handleReaction(reaction.emoji)}
-            >
-              <span className="text-base leading-none">{reaction.emoji}</span>
-              <span className="text-xs font-medium leading-none">
-                {reaction.count}
-              </span>
-            </Button>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-
-      <Popover open={showPicker} onOpenChange={setShowPicker}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 px-2"
-          >
-            <span className="text-base">😀</span>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-full p-2" align="start">
-          <div className="grid grid-cols-3 gap-1">
-            {DEFAULT_REACTIONS.map((reaction) => (
-              <Button
-                key={reaction.emoji}
-                variant="ghost"
-                size="sm"
-                className="flex flex-col items-center gap-1 h-auto py-2"
-                onClick={() => handleReaction(reaction.emoji)}
+    <TooltipProvider>
+      <div className={`flex items-center gap-2 ${className}`}>
+        <div className="relative">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setShowPicker(!showPicker)}
+                className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
-                <span className="text-2xl">{reaction.emoji}</span>
-                <span className="text-xs">{reaction.label}</span>
-              </Button>
-            ))}
-          </div>
-        </PopoverContent>
-      </Popover>
+                {reactionEmojis.like}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Add reaction</TooltipContent>
+          </Tooltip>
 
-      {reactions.length > 0 && (
-        <div className="text-xs text-muted-foreground ml-1">
-          {reactions.reduce((sum, r) => sum + r.count, 0)} reactions
+          <AnimatePresence>
+            {showPicker && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                className="absolute bottom-full left-0 mb-2 flex gap-1 p-2 bg-white dark:bg-gray-900 rounded-lg shadow-lg border dark:border-gray-700"
+              >
+                {Object.entries(reactionEmojis).map(([type, emoji]) => (
+                  <Tooltip key={type}>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={() => {
+                          onReact(type as Reaction['type'])
+                          setShowPicker(false)
+                        }}
+                        className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        {emoji}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>{reactionLabels[type as keyof typeof reactionLabels]}</TooltipContent>
+                  </Tooltip>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      )}
-    </div>
-  );
+
+        {reactions.some(r => r.count > 0) && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {formatReactionSummary(reactions)}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <pre className="text-sm">{getDetailedReactionSummary()}</pre>
+            </TooltipContent>
+          </Tooltip>
+        )}
+      </div>
+    </TooltipProvider>
+  )
 }

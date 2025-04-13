@@ -289,23 +289,23 @@
 - [x] Add filters
 
 #### Interaction Components
-- [ ] Create ReactionBar
-  - [ ] Emoji reactions
-  - [ ] Counter
-  - [ ] Animation
-- [ ] Add reaction picker
-- [ ] Create reaction summary
-- [ ] Add tooltips
+- [x] Create ReactionBar
+  - [x] Emoji reactions
+  - [x] Counter
+  - [x] Animation
+- [x] Add reaction picker
+- [x] Create reaction summary
+- [x] Add tooltips
 
 #### Comments
-- [ ] Build CommentThread
-  - [ ] Comment input
-  - [ ] Nested replies
-  - [ ] Pagination
-  - [ ] Sort options
-- [ ] Add rich text
-- [ ] Create mention system
-- [ ] Add moderation tools
+- [x] Build CommentThread
+  - [x] Comment input
+  - [x] Nested replies
+  - [x] Pagination
+  - [x] Sort options
+- [x] Add rich text
+- [x] Create mention system
+- [x] Add moderation tools
 
 ### Feed Implementation
 - [ ] Create feed algorithm
