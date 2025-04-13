@@ -158,13 +158,13 @@
 - [x] Create breadcrumbs
 
 #### Responsive Layout
-- [ ] Create layout wrapper
-  - [ ] Mobile layout
-  - [ ] Tablet layout
-  - [ ] Desktop layout
-- [ ] Add breakpoint system
-- [ ] Create grid system
-- [ ] Build spacing system
+- [x] Create layout wrapper
+  - [x] Mobile layout
+  - [x] Tablet layout
+  - [x] Desktop layout
+- [x] Add breakpoint system
+- [x] Create grid system
+- [x] Build spacing system
 
 #### Header System
 - [ ] Create main header
