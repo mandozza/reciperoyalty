@@ -276,14 +276,17 @@
 - [x] Add video optimization
 
 #### Activity Cards
-- [ ] Build ActivityCard
-  - [ ] User action
-  - [ ] Timestamp
-  - [ ] Preview
-  - [ ] Context
-- [ ] Add interaction options
-- [ ] Create grouped activities
-- [ ] Add filters
+- [x] Build ActivityCard
+  - [x] User action
+  - [x] Timestamp
+  - [x] Preview
+  - [x] Context
+- [x] Add interaction options
+  - [x] Emoji reactions
+  - [x] Counter
+  - [x] Animation
+- [x] Create grouped activities
+- [x] Add filters
 
 #### Interaction Components
 - [ ] Create ReactionBar
