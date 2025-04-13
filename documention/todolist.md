@@ -17,9 +17,9 @@
 - [x] Set up CSS reset
 
 ### Database Setup
-- [ ] Set up MongoDB Atlas cluster
-- [ ] Configure Mongoose
-  - [ ] Create connection utility
+- [x] Set up MongoDB Atlas cluster
+- [x] Configure Mongoose
+  - [x] Create connection utility
   - [ ] Set up models
   - [ ] Configure indexes
 - [ ] Create database schemas
