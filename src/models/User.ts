@@ -5,6 +5,8 @@ import { z } from 'zod';
 export const UserValidation = z.object({
   name: z.string().min(2).max(50),
   email: z.string().email(),
+  password: z.string().min(8),
+  emailVerified: z.date().optional(),
   avatar: z.string().url().optional(),
   bio: z.string().max(500).optional(),
   followers: z.array(z.string()).optional(),
@@ -15,6 +17,8 @@ export const UserValidation = z.object({
 export interface IUser extends Document {
   name: string;
   email: string;
+  password: string;
+  emailVerified?: Date;
   avatar?: string;
   bio?: string;
   followers: mongoose.Types.ObjectId[];
@@ -53,6 +57,16 @@ const UserSchema = new Schema<IUser>(
         message: 'Please enter a valid email address',
       },
     },
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      minlength: [8, 'Password must be at least 8 characters long'],
+      select: false, // Don't include password in query results by default
+    },
+    emailVerified: {
+      type: Date,
+      default: null,
+    },
     avatar: {
       type: String,
       validate: {
@@ -87,6 +101,7 @@ const UserSchema = new Schema<IUser>(
     toJSON: {
       transform: (_, ret) => {
         delete ret.__v;
+        delete ret.password; // Never expose password in JSON
         return ret;
       },
     },

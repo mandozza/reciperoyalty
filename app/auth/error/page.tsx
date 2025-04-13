@@ -1,27 +1,61 @@
+"use client";
+
 import { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Authentication Error | Recipe Royalty",
   description: "There was an error during authentication",
 };
 
-export default function AuthErrorPage({
-  searchParams,
-}: {
-  searchParams: { error?: string };
-}) {
-  const error = searchParams?.error || "Default Error";
+export default function AuthErrorPage() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
 
-  const errors: { [key: string]: string } = {
-    Configuration: "There is a problem with the server configuration.",
-    AccessDenied: "You do not have permission to sign in.",
-    Verification: "The verification token has expired or has already been used.",
-    Default: "An error occurred during authentication.",
-  };
+  let errorMessage = "An error occurred during authentication.";
 
-  const errorMessage = errors[error] || errors.Default;
+  switch (error) {
+    case "Configuration":
+      errorMessage = "There is a problem with the server configuration.";
+      break;
+    case "AccessDenied":
+      errorMessage = "Access was denied to this resource.";
+      break;
+    case "Verification":
+      errorMessage = "The verification token has expired or has already been used.";
+      break;
+    case "OAuthSignin":
+      errorMessage = "Error in constructing an authorization URL.";
+      break;
+    case "OAuthCallback":
+      errorMessage = "Error in handling the response from an OAuth provider.";
+      break;
+    case "OAuthCreateAccount":
+      errorMessage = "Could not create OAuth provider user in the database.";
+      break;
+    case "EmailCreateAccount":
+      errorMessage = "Could not create email provider user in the database.";
+      break;
+    case "Callback":
+      errorMessage = "Error in the OAuth callback handler route.";
+      break;
+    case "OAuthAccountNotLinked":
+      errorMessage = "Email on the account conflicts with another existing account.";
+      break;
+    case "EmailSignin":
+      errorMessage = "Check your email address.";
+      break;
+    case "CredentialsSignin":
+      errorMessage = "Sign in failed. Check the details you provided are correct.";
+      break;
+    case "SessionRequired":
+      errorMessage = "Please sign in to access this page.";
+      break;
+    default:
+      errorMessage = "An unknown error occurred. Please try again.";
+  }
 
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
@@ -34,10 +68,12 @@ export default function AuthErrorPage({
             {errorMessage}
           </p>
         </div>
-        <Button asChild>
-          <Link href="/auth/signin">
-            Try Again
-          </Link>
+
+        <Button
+          variant="outline"
+          onClick={() => window.location.href = "/auth/signin"}
+        >
+          Back to Sign In
         </Button>
       </div>
     </div>

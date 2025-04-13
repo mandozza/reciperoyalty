@@ -1,4 +1,8 @@
+"use client";
+
 import { Metadata } from "next";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Verify Request | Recipe Royalty",
@@ -6,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default function VerifyRequestPage() {
+  const router = useRouter();
+
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -20,6 +26,13 @@ export default function VerifyRequestPage() {
         <p className="px-8 text-center text-sm text-muted-foreground">
           If you don&apos;t see it, check your spam folder. The link will expire in 24 hours.
         </p>
+
+        <Button
+          variant="outline"
+          onClick={() => router.push("/auth/signin")}
+        >
+          Back to Sign In
+        </Button>
       </div>
     </div>
   );
