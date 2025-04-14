@@ -1,31 +1,27 @@
-import * as React from "react"
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
-import { cn } from "@/lib/utils"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
-interface UserAvatarProps extends React.ComponentPropsWithoutRef<typeof Avatar> {
-  name?: string | null
-  image?: string | null
-  className?: string
+export interface UserAvatarProps {
+  user: {
+    name: string;
+    image?: string;
+  };
+  className?: string;
 }
 
-export function UserAvatar({ name, image, className, ...props }: UserAvatarProps) {
+export function UserAvatar({ user, className }: UserAvatarProps) {
   return (
-    <Avatar className={cn("", className)} {...props}>
-      {image ? (
-        <AvatarImage alt={name ?? ""} src={image} />
-      ) : (
-        <AvatarFallback>
-          {name
-            ? name
-                .split(" ")
-                .map((n) => n[0])
-                .slice(0, 2)
-                .join("")
-                .toUpperCase()
-            : null}
-        </AvatarFallback>
-      )}
+    <Avatar className={cn("", className)}>
+      <AvatarImage src={user.image} alt={user.name} />
+      <AvatarFallback>
+        {user.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()}
+      </AvatarFallback>
     </Avatar>
-  )
+  );
 }

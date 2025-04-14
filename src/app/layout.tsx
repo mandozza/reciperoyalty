@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/shared/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
-import { ModalProvider } from "@/components/providers/modal-provider";
-import { NotificationContainer } from "@/components/ui/notification-container";
+import { Toaster } from "sonner";
+import { inter } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Recipe Royalty - Social Cooking Platform",
@@ -25,23 +21,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
+        <Providers>
           {children}
-          <Toaster />
-          <ModalProvider />
-          <NotificationContainer />
-        </ThemeProvider>
+          <Toaster position="top-center" />
+        </Providers>
       </body>
     </html>
   );

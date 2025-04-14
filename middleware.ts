@@ -1,7 +1,7 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { rateLimit } from "./lib/rate-limit";
+import { rateLimit } from "@/lib/rate-limit";
 import csrf from "edge-csrf";
 
 // Initialize CSRF protection

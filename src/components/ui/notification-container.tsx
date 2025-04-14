@@ -1,3 +1,5 @@
+"use client";
+
 import { useNotificationStore } from "@/lib/stores/notification-store"
 import { NotificationToast } from "./notification-toast"
 

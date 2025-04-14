@@ -93,15 +93,20 @@ EMAIL_FROM=noreply@example.com
 
 ```
 src/
-├── app/                 # Next.js App Router pages
-├── components/         # React components
-│   ├── ui/            # ShadcnUI components
-│   └── ...            # Feature components
-├── lib/               # Utilities and configurations
-├── models/            # Mongoose models
-├── types/             # TypeScript types
-├── hooks/             # Custom React hooks
-└── stories/           # Storybook stories
+├── app/              # Next.js App Router pages
+├── components/       # React components
+│   ├── ui/          # ShadcnUI components
+│   └── ...          # Feature components
+├── lib/             # Utilities and configurations
+│   ├── api/         # API utilities
+│   ├── auth/        # Authentication related
+│   ├── db/          # Database utilities
+│   ├── services/    # Service utilities
+│   └── stores/      # State management
+├── models/          # Mongoose models
+├── types/           # TypeScript types
+├── hooks/           # Custom React hooks
+└── stories/         # Storybook stories
 ```
 
 ### Environment Modes
