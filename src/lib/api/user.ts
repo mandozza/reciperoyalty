@@ -24,14 +24,16 @@ type LeanUser = {
   _id: Types.ObjectId;
   name: string;
   email: string;
+  image?: string;
   avatar?: string;
   bio?: string;
   followers: Types.ObjectId[];
   following: Types.ObjectId[];
   blockedUsers: Types.ObjectId[];
+  recipes?: Types.ObjectId[];
 };
 
-interface PopulatedUser extends Omit<LeanUser, 'followers' | 'following' | 'blockedUsers'> {
+interface PopulatedUser extends Omit<LeanUser, 'followers' | 'following' | 'blockedUsers' | 'recipes'> {
   recipes: Recipe[];
   cookbooks: Cookbook[];
   followers: LeanUser[];
@@ -111,11 +113,11 @@ export async function getUserProfile(userId: string): Promise<UserProfileRespons
 
     if (!user) return null;
 
-    const isFollowing = currentUserId ? user.followers.some(
+    const isFollowing = currentUserId && user.followers ? user.followers.some(
       (follower) => follower._id.toString() === currentUserId
     ) : false;
 
-    const isBlocked = currentUserId ? user.blockedUsers.some(
+    const isBlocked = currentUserId && user.blockedUsers ? user.blockedUsers.some(
       (blocked) => blocked._id.toString() === currentUserId
     ) : false;
 
@@ -123,7 +125,7 @@ export async function getUserProfile(userId: string): Promise<UserProfileRespons
       id: user._id.toString(),
       name: user.name,
       email: user.email,
-      image: user.avatar,
+      image: user.image || user.avatar,
       bio: user.bio,
       isFollowing,
       isBlocked,
@@ -136,7 +138,7 @@ export async function getUserProfile(userId: string): Promise<UserProfileRespons
         id: recipe._id.toString(),
         title: recipe.title,
         image: recipe.image,
-        likes: recipe.likes,
+        likes: recipe.likes || 0,
         cookTime: recipe.cookTime,
         difficulty: recipe.difficulty,
       })) || [],
@@ -144,29 +146,29 @@ export async function getUserProfile(userId: string): Promise<UserProfileRespons
         id: cookbook._id.toString(),
         title: cookbook.title,
         description: cookbook.description,
-        recipeCount: cookbook.recipes.length,
+        recipeCount: cookbook.recipes?.length || 0,
         image: cookbook.image,
       })) || [],
       followers: user.followers?.map((follower) => ({
         id: follower._id.toString(),
         name: follower.name,
-        image: follower.avatar,
-        recipesCount: follower.followers.length,
-        followersCount: follower.followers.length,
+        image: follower.image || follower.avatar,
+        recipesCount: follower.recipes?.length || 0,
+        followersCount: follower.followers?.length || 0,
       })) || [],
       following: user.following?.map((following) => ({
         id: following._id.toString(),
         name: following.name,
-        image: following.avatar,
-        recipesCount: following.followers.length,
-        followersCount: following.followers.length,
+        image: following.image || following.avatar,
+        recipesCount: following.recipes?.length || 0,
+        followersCount: following.followers?.length || 0,
       })) || [],
       blockedUsers: user.blockedUsers?.map((blocked) => ({
         id: blocked._id.toString(),
         name: blocked.name,
-        image: blocked.avatar,
-        recipesCount: blocked.followers.length,
-        followersCount: blocked.followers.length,
+        image: blocked.image || blocked.avatar,
+        recipesCount: blocked.recipes?.length || 0,
+        followersCount: blocked.followers?.length || 0,
       })) || [],
     };
   } catch (error) {

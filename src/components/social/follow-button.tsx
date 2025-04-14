@@ -1,8 +1,10 @@
+"use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
+import { Loader2, UserMinus, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -15,14 +17,14 @@ interface FollowButtonProps {
   size?: "default" | "sm" | "lg";
 }
 
-export function FollowButton({
+const FollowButton = ({
   userId,
   isFollowing: initialIsFollowing,
   followersCount: initialFollowersCount,
   className,
   variant = "default",
   size = "default",
-}: FollowButtonProps) {
+}: FollowButtonProps) => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +81,7 @@ export function FollowButton({
         className={cn("min-w-[100px]", className)}
         disabled
       >
-        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         Loading
       </Button>
     );
@@ -98,11 +100,11 @@ export function FollowButton({
       disabled={isLoading}
     >
       {isLoading ? (
-        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : isFollowing ? (
-        <Icons.userMinus className="mr-2 h-4 w-4" />
+        <UserMinus className="mr-2 h-4 w-4" />
       ) : (
-        <Icons.userPlus className="mr-2 h-4 w-4" />
+        <UserPlus className="mr-2 h-4 w-4" />
       )}
       <span>{isFollowing ? "Unfollow" : "Follow"}</span>
       {followersCount > 0 && (
@@ -113,4 +115,6 @@ export function FollowButton({
       )}
     </Button>
   );
-}
+};
+
+export default FollowButton;

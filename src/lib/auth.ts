@@ -1,9 +1,10 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import dbConnect from "./dbConnect";
-import User from "@/models/User";
+import dbConnect from "@/lib/db/connect";
+import User, { IUser } from "@/models/User";
 import bcrypt from "bcryptjs";
+import { Types } from "mongoose";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -24,8 +25,11 @@ export const authOptions: NextAuthOptions = {
 
         await dbConnect();
 
-        const user = await User.findOne({ email: credentials.email });
-        if (!user) {
+        const user = await User.findOne({ email: credentials.email })
+          .select("+password")
+          .lean() as (IUser & { password: string; _id: Types.ObjectId }) | null;
+
+        if (!user || !user.password) {
           throw new Error("User not found");
         }
 

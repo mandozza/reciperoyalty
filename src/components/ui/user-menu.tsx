@@ -47,7 +47,7 @@ export function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/profile" className="cursor-pointer flex w-full items-center">
+          <Link href={`/profile/${session.user.id}`} className="cursor-pointer flex w-full items-center">
             <User className="mr-2 h-4 w-4" />
             Profile
           </Link>

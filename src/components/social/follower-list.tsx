@@ -1,9 +1,11 @@
+"use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { UserCard } from "@/components/ui/user-card";
-import { Icons } from "@/components/ui/icons";
+import { Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +51,7 @@ export function FollowerList({
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
         />
-        <Icons.search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       </div>
 
       <ScrollArea className="h-[400px] rounded-md border p-4">
@@ -81,7 +83,7 @@ export function FollowerList({
                 >
                   {isLoading ? (
                     <>
-                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Loading...
                     </>
                   ) : (

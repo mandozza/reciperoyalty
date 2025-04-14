@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { UserAvatar } from "../ui/user-avatar";
 import { Button } from "../ui/button";
-import { Icons } from "../ui/icons";
+import { Camera, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -18,7 +18,9 @@ import { updateProfile } from "@/lib/api/user";
 import { User } from "../../types/user";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Separator } from "../ui/separator";
-import { FollowButton } from "@/components/social/follow-button";
+import FollowButton from "@/components/social/follow-button";
+import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import { UserMenu } from "@/components/ui/user-menu";
 
 const profileSchema = z.object({
   bio: z
@@ -193,6 +195,16 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
 
   return (
     <div className="relative w-full">
+      {/* Theme Toggle and User Menu */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2 p-2 rounded-lg bg-black/20 backdrop-blur-sm border border-white/10">
+        <div className="[&_*]:text-white [&_button]:hover:bg-white/10 [&_*]:transition-colors">
+          <UserMenu />
+        </div>
+        <div className="[&_*]:text-white [&_button]:hover:bg-white/10 [&_*]:transition-colors">
+          <ThemeSwitcher />
+        </div>
+      </div>
+
       {/* Cover Image */}
       <div className="relative h-48 w-full overflow-hidden sm:h-64">
         {user.coverImage ? (
@@ -216,9 +228,9 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
               )}
             >
               {isUploading ? (
-                <Icons.spinner className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Icons.camera className="h-4 w-4" />
+                <Camera className="h-4 w-4" />
               )}
               Change Cover
               <input
@@ -246,20 +258,16 @@ export function UserProfileHeader({ user, isOwnProfile = false }: UserProfileHea
                   className="h-20 w-20"
                 />
                 {isOwnProfile && (
-                  <label
-                    htmlFor="avatar-upload"
-                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow hover:bg-primary/90"
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-background shadow-sm"
+                    onClick={() => document.getElementById("avatar-upload")?.click()}
+                    disabled={isUploading}
                   >
-                    <Icons.camera className="h-4 w-4" />
-                    <input
-                      id="avatar-upload"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleAvatarUpload}
-                      disabled={isUploading}
-                    />
-                  </label>
+                    <Camera className="h-4 w-4" />
+                  </Button>
                 )}
               </div>
               <div className="flex space-x-6">

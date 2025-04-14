@@ -9,13 +9,8 @@ declare global {
   var mongoose: MongooseConnection | undefined;
 }
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env');
-}
-
-if (!process.env.MONGODB_DB) {
-  throw new Error('Please define the MONGODB_DB environment variable inside .env');
-}
+// Default to localhost if no MONGODB_URI is provided
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/reciperoyalty';
 
 const cached: MongooseConnection = global.mongoose || { conn: null, promise: null };
 
@@ -29,13 +24,26 @@ async function connectDB(): Promise<typeof mongoose> {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(process.env.MONGODB_URI!);
+    const opts = {
+      bufferCommands: false,
+    };
+
+    try {
+      cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+        console.log("Connected to MongoDB at:", MONGODB_URI);
+        return mongoose;
+      });
+    } catch (error) {
+      console.error("Failed to connect to MongoDB:", error);
+      throw error;
+    }
   }
 
   try {
     cached.conn = await cached.promise;
   } catch (e) {
     cached.promise = null;
+    console.error("Error establishing MongoDB connection:", e);
     throw e;
   }
 

@@ -1,11 +1,14 @@
+"use client";
+
 import * as React from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Home, Search, Book, Calendar, User } from "lucide-react"
 import { useSpring, animated } from "@react-spring/web"
 import { useDrag } from "@use-gesture/react"
-import type { DragGestureState } from "@use-gesture/react"
+import type { FullGestureState } from "@use-gesture/react"
 import { cn } from "@/lib/utils"
+import { useSession } from "next-auth/react"
 
 interface NavItem {
   href: string
@@ -14,34 +17,6 @@ interface NavItem {
   badge?: number
 }
 
-const navItems: NavItem[] = [
-  {
-    href: "/",
-    label: "Home",
-    icon: <Home className="h-6 w-6" />,
-  },
-  {
-    href: "/explore",
-    label: "Explore",
-    icon: <Search className="h-6 w-6" />,
-  },
-  {
-    href: "/cookbooks",
-    label: "Cookbooks",
-    icon: <Book className="h-6 w-6" />,
-  },
-  {
-    href: "/meal-plan",
-    label: "Meal Plan",
-    icon: <Calendar className="h-6 w-6" />,
-  },
-  {
-    href: "/profile",
-    label: "Profile",
-    icon: <User className="h-6 w-6" />,
-  },
-]
-
 /**
  * Mobile bottom navigation bar with tabs, badges, and swipe gestures
  * Only visible on mobile devices
@@ -49,14 +24,43 @@ const navItems: NavItem[] = [
 export function BottomNavBar() {
   const pathname = usePathname()
   const router = useRouter()
+  const { data: session } = useSession()
   const [{ x }, api] = useSpring(() => ({ x: 0 }))
+
+  const navItems: NavItem[] = [
+    {
+      href: "/",
+      label: "Home",
+      icon: <Home className="h-6 w-6" />,
+    },
+    {
+      href: "/explore",
+      label: "Explore",
+      icon: <Search className="h-6 w-6" />,
+    },
+    {
+      href: "/cookbooks",
+      label: "Cookbooks",
+      icon: <Book className="h-6 w-6" />,
+    },
+    {
+      href: "/meal-plan",
+      label: "Meal Plan",
+      icon: <Calendar className="h-6 w-6" />,
+    },
+    {
+      href: session?.user?.id ? `/profile/${session.user.id}` : "/auth/signin",
+      label: "Profile",
+      icon: <User className="h-6 w-6" />,
+    },
+  ]
 
   // Find current index
   const currentIndex = navItems.findIndex((item) => item.href === pathname)
 
   // Handle swipe gestures
   const bind = useDrag(
-    ({ movement: [mx], direction: [xDir], distance, cancel }: DragGestureState) => {
+    ({ movement: [mx], direction: [xDir], distance, cancel }: FullGestureState<"drag">) => {
       // If swipe distance is greater than 50px, navigate
       if (distance > 50) {
         // Prevent overscrolling past first/last items

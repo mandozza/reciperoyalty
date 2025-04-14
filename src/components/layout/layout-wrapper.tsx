@@ -2,11 +2,17 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { SidebarNav } from "./sidebar-nav"
 import { BottomNavBar } from "./bottom-nav"
+import { Header } from "./header"
 
 interface LayoutWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   showNav?: boolean
   showHeader?: boolean
+  user?: {
+    name: string
+    email: string
+    image?: string
+  }
 }
 
 /**
@@ -17,11 +23,15 @@ export function LayoutWrapper({
   children,
   showNav = true,
   showHeader = true,
+  user,
   className,
   ...props
 }: LayoutWrapperProps) {
   return (
     <div className="min-h-screen bg-background">
+      {/* Header */}
+      {showHeader && <Header user={user} />}
+
       {/* Desktop sidebar */}
       {showNav && <SidebarNav />}
 

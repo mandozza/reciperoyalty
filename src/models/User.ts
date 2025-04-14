@@ -29,6 +29,8 @@ export interface IUser extends Document {
   following: mongoose.Types.ObjectId[];
   blockedUsers: mongoose.Types.ObjectId[];
   favoriteRecipes: mongoose.Types.ObjectId[];
+  recipes: mongoose.Types.ObjectId[];
+  cookbooks: mongoose.Types.ObjectId[];
   dietaryPreferences: string[];
   cookingSkillLevel: 'beginner' | 'intermediate' | 'advanced';
   createdAt: Date;
@@ -105,6 +107,14 @@ const UserSchema = new Schema<IUser>(
       trim: true,
       maxlength: [500, 'Bio cannot be more than 500 characters'],
     },
+    recipes: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Recipe',
+    }],
+    cookbooks: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Cookbook',
+    }],
     followers: [{
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -257,10 +267,17 @@ UserSchema.methods.hasFavoriteRecipe = function(recipeId: mongoose.Types.ObjectI
 };
 
 // Indexes for better query performance
-UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ name: 'text' });
 
 // Create and export the model
-const User = (mongoose.models.User || mongoose.model<IUser>('User', UserSchema)) as Model<IUser>;
+let User: Model<IUser>;
+
+try {
+  // Check if the model is already registered
+  User = mongoose.model<IUser>('User');
+} catch {
+  // If not, register the model
+  User = mongoose.model<IUser>('User', UserSchema);
+}
 
 export default User;
