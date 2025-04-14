@@ -4,13 +4,19 @@ import { Crown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import { UserMenu } from "@/components/ui/user-menu";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Theme Switcher */}
-      <div className="absolute top-4 right-4 z-50">
-        <ThemeSwitcher />
+      {/* Top Right Menu */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2 p-2 rounded-lg bg-black/20 backdrop-blur-sm border border-white/10">
+        <div className="[&_*]:text-white [&_button]:hover:bg-white/10 [&_*]:transition-colors">
+          <UserMenu />
+        </div>
+        <div className="[&_*]:text-white [&_button]:hover:bg-white/10 [&_*]:transition-colors">
+          <ThemeSwitcher />
+        </div>
       </div>
 
       {/* Hero Section */}
@@ -34,7 +40,7 @@ export default function Home() {
             Share your culinary masterpieces and discover recipes from food enthusiasts around the world
           </p>
           <div className="flex flex-col gap-4 sm:flex-row justify-center">
-            <Button size="lg" variant="default" asChild>
+            <Button size="lg" className="bg-white text-black hover:bg-white/90" asChild>
               <Link href="/recipes">Explore Recipes</Link>
             </Button>
             <Button size="lg" variant="outline" className="bg-white/10 text-white hover:bg-white/20" asChild>
