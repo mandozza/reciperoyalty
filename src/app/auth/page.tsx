@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { inter } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
+import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 
 export const metadata: Metadata = {
   title: "Sign In - Recipe Royalty",
@@ -16,6 +17,9 @@ export const metadata: Metadata = {
 export default function AuthPage() {
   return (
     <div className={cn("container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0", inter.className)}>
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeSwitcher />
+      </div>
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900">
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-zinc-900/60" />
@@ -35,7 +39,7 @@ export default function AuthPage() {
           </blockquote>
         </div>
       </div>
-      <div className="p-4 lg:p-8">
+      <div className="p-4 lg:p-8 relative">
         <div className="mx-auto flex w-full flex-col justify-center sm:w-[350px]">
           <Card>
             <CardHeader className="space-y-1">
